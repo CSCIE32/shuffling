@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="shuffling">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Shuffling Pines</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="vendors.js"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-app="shuffling" ng-cloak>
+    <h1>Shuffling Pines</h1>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Form</a></li>
+          <li role="presentation"><a href="#guests" aria-controls="guests" role="tab" data-toggle="tab">Guests</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- Tab pane 1 -->
+          <div role="tabpanel" class="tab-pane active" id="form" ng-controller="FormController as vm">
+            <div>
+              <form class="col-md-6 well" ng-submit="vm.submit()">
+                <div class="form-group">
+                  <label for="guest-name">Guest Name</label>
+                  <input ng-model="vm.name" type="text" class="form-control" id="guest-name" placeholder="">
+                </div>
+                <div class="form-group">
+                  <label for="transition-date">Transition Date</label>
+                  <input type="date" class="form-control" id="transition-date" placeholder="" ng-model="vm.transitionDate">
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="pickup-dropoff" id="pickup" value="pickup" checked ng-model="vm.status">
+                    Pick-up
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="pickup-dropoff" id="dropoff" value="dropoff" ng-model="vm.status">
+                    Drop-off
+                  </label>
+                </div>
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <textarea class="form-control" id="location" ng-model="vm.pickupLocation"></textarea>
+                </div>
+                <button type="submit" class="btn">Submit</button>
+              </form>
+
+              <!-- bound display -->
+              <div ng-show="true" class="col-md-6 well">
+                <div ng-show="true" class="form-group">
+                  <label>Name: </label>
+                  {{vm.name}}
+                </div>
+                <div ng-show="true" class="form-group">
+                  <label>Transition Date: </label>
+                  {{vm.transitionDate}}
+                </div>
+                <div ng-show="true" class="form-group">
+                  <label>Status: </label>
+                  {{vm.status}}
+                </div>
+                <div ng-show="true" class="form-group">
+                  <label>Location: </label>
+                  {{vm.pickupLocation}}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Tab pane 2 -->
+          <div role="tabpanel" class="tab-pane" id="guests" ng-controller="TabController as vm">
+            <ul class="list-unstyled">
+              <li>
+
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
