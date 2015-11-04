@@ -6,6 +6,11 @@ app.controller('FormController', ['$scope', 'shufflingSvc', function ($scope, sh
         console.log('in FormControllers submit');
         console.log(vm.name, " - ", vm.transitionDate, " - ", vm.status, " - ", vm.pickupLocation);
         shufflingSvc.addGuest(vm.name, vm.transitionDate, vm.status, vm.pickupLocation);
+
+        angular.element('#guests').addClass("active");
+        angular.element('#guestsTab').addClass("active");
+        angular.element('#form').removeClass("active");
+        angular.element('#formTab').removeClass("active");
     };
 
 }]);
