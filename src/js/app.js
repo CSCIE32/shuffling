@@ -2,11 +2,14 @@ var app = angular.module('shuffling', []);
 
 app.controller('FormController', ['$scope', 'shufflingSvc', function ($scope, shufflingSvc) {
     var vm = this;
+
+    /**
+     * On form submit
+     */
     vm.submit = function () {
-        console.log('in FormControllers submit');
-        console.log(vm.name, " - ", vm.transitionDate, " - ", vm.status, " - ", vm.pickupLocation);
         shufflingSvc.addGuest(vm.name, vm.transitionDate, vm.status, vm.pickupLocation);
 
+        // Switch to guests tab
         angular.element('#guests').addClass("active");
         angular.element('#guestsTab').addClass("active");
         angular.element('#form').removeClass("active");
@@ -17,21 +20,35 @@ app.controller('FormController', ['$scope', 'shufflingSvc', function ($scope, sh
 
 app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shufflingSvc) {
     var vm = this;
+
+    /**
+     * Get guest list
+     */
     vm.getGuestList = function () {
-        console.log("TabController.getGuestList");
         return shufflingSvc.getGuestList();
     };
 
+    /**
+     * Delete Guest
+     * @param index
+     */
     vm.deleteGuest = function(index){
-        console.log('deleteGuest - ', index);
         shufflingSvc.deleteGuest(index);
     };
 
+    /**
+     * Edit guest
+     * @param index
+     */
     vm.editGuest = function(index){
-        console.log('editGuest - ', index);
         shufflingSvc.editGuest(index);
     };
 
+    /**
+     * Compute available options based on current status
+     * @param status
+     * @returns {Array}
+     */
     vm.availableOptions = function(status){
         var options = [];
         options.push(status);
@@ -42,63 +59,64 @@ app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shu
             options.push('picked');
         }
         return options;
-
     };
 
 }]);
 
-app.service('shufflingSvc', ['Guest', 'sampleDataSvc', function (Guest,sampleDataSvc) {
+app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataSvc) {
     var that = this;
 
-    this.fetchFromLocalStorage = function(){
-        var guests = [];
-        var jsonGuests = JSON.parse(localStorage.getItem('guests'));
-        console.log('jsonGuests.length',jsonGuests.length);
-        console.log('jsonGuests - ', jsonGuests);
+    /**
+     * All guest data
+     */
+    var guests = GuestDataSvc.getGuestData();
 
-        jsonGuests.forEach(function(guest){
-            console.log('guest - ', guest);
-            guest.transitionDate = new Date(guest.transitionDate);
-            console.log("is date - ", angular.isDate(guest.transitionDate));
-            guests.push(guest);
-        });
-        return guests;
-    };
-
-    var guests = this.fetchFromLocalStorage();
-
+    /**
+     * Return all guest data
+     */
     this.getGuestList = function () {
-        console.log("shufflingSvc.getGuestList() - ", guests);
         return guests ;
     };
 
+    /**
+     * Add a new guest
+     * @param name
+     * @param transitionDate
+     * @param status
+     * @param pickupLocation
+     */
     this.addGuest = function (name, transitionDate, status, pickupLocation) {
         guests.push(new Guest(name, transitionDate, status, pickupLocation));
-        updateLocalStorage();
+        GuestDataSvc.saveGuestData(guests);
     };
 
+    /**
+     * delete a guest
+     * @param index
+     */
     this.deleteGuest = function (index) {
         var proceed = confirm("Do you want to delete guest: "+ guests[index].name+ "?");
         if(proceed) {
             guests.splice(index, 1);
-            updateLocalStorage();
+            GuestDataSvc.saveGuestData(guests);
         }
     };
 
+    /**
+     * edit a guest
+     * @param index
+     */
     this.editGuest = function (index) {
         if(undefined == guests[index].checked){
             guests[index].checked =  true;
         } else{
             guests[index].checked = !guests[index].checked;
         }
-        updateLocalStorage();
-    };
-
-    updateLocalStorage = function () {
-        localStorage.setItem('guests', JSON.stringify(that.getGuestList()));
+        GuestDataSvc.saveGuestData(guests);
     };
 
 }]);
+
 
 app.service('sampleDataSvc', ['$http', function ($http) {
     this.guests = [];
@@ -112,7 +130,5 @@ app.service('sampleDataSvc', ['$http', function ($http) {
         .error(function (data) {
             alert('Error reading guests.json');
         });
-
-
 
 }]);
