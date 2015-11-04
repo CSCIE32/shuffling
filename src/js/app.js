@@ -30,10 +30,10 @@ app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shu
     vm.availableOptions = function(status){
         var options = [];
         options.push(status);
-        if('dropoff' == status || 'pickup' == status){
+        if('dropoff' === status || 'pickup' === status){
             options.push('arrived');
         }
-        if('arrived' == status ){
+        if('arrived' === status ){
             options.push('picked');
         }
         return options;
@@ -44,7 +44,23 @@ app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shu
 
 app.service('shufflingSvc', ['Guest', 'sampleDataSvc', function (Guest,sampleDataSvc) {
     var that = this;
-    var guests = JSON.parse(localStorage.getItem('guests')) || [];
+
+    this.fetchFromLocalStorage = function(){
+        var guests = [];
+        var jsonGuests = JSON.parse(localStorage.getItem('guests'));
+        console.log('jsonGuests.length',jsonGuests.length);
+        console.log('jsonGuests - ', jsonGuests);
+
+        jsonGuests.forEach(function(guest){
+            console.log('guest - ', guest);
+            guest.transitionDate = new Date(guest.transitionDate);
+            console.log("is date - ", angular.isDate(guest.transitionDate));
+            guests.push(guest);
+        });
+        return guests;
+    };
+
+    var guests = this.fetchFromLocalStorage();
 
     this.getGuestList = function () {
         console.log("shufflingSvc.getGuestList() - ", guests);
