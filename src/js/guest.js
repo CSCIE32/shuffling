@@ -1,7 +1,8 @@
 angular.module('shuffling').factory('Guest', function(){
-    var Guest = function(name, transitionDate, pickupLocation){
+    var Guest = function(name, transitionDate, status, pickupLocation){
         this.name = name;
-        this.transitionDate = transitionDate;
+        this.transitionDate = new Date(transitionDate);
+        this.status = status;
         this.pickupLocation = pickupLocation;
     };
 
