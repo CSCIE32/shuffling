@@ -26,7 +26,9 @@ gulp.task('buildVendor', function(){
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('buildCSS', function(){
+gulp.task('buildCSS', ['css', 'fonts']);
+
+gulp.task('css', function(){
     return gulp.src([
         'bower_components/bootstrap/dist/css/bootstrap.css',
         'bower_components/**/*.css',
@@ -34,6 +36,14 @@ gulp.task('buildCSS', function(){
         .pipe(concat('styles.css'))
         .pipe(minifycss())
         .pipe(gulp.dest('dist'))
+        .pipe(connect.reload());
+});
+
+
+gulp.task('fonts', function(){
+    return gulp.src([
+        'bower_components/bootstrap/dist/fonts/*.*'])
+        .pipe(gulp.dest('dist/fonts'))
         .pipe(connect.reload());
 });
 
