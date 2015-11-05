@@ -10,6 +10,12 @@ app.controller('FormController', ['$scope', 'shufflingSvc', function ($scope, sh
         console.log('FormController.submit()');
         shufflingSvc.addGuest(vm.name, vm.transitionDate, vm.status, vm.pickupLocation);
 
+        //Clean up the form
+        vm.name=null;
+        vm.transitionDate=null;
+        vm.pickupLocation = null;
+        vm.status = null;
+
         // Switch to guests tab
         angular.element('#guests').addClass("active");
         angular.element('#guestsTab').addClass("active");
