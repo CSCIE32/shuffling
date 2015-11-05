@@ -1,5 +1,19 @@
 angular.module('shuffling').service('GuestDataSvc', function(){
 
+    var sampleGuestData = [
+        {
+            "name": "Bilbo Baggins",
+            "transitionDate": "2015-10-02T04:00:00.000Z",
+            "status": "dropoff",
+            "pickupLocation": "Shire"
+        },
+        {
+            "name": "Tom Bombadil",
+            "transitionDate": "2015-10-02T04:00:00.000Z",
+            "status": "pickup",
+            "pickupLocation": "Prancing Pony Inn"
+        }
+    ];
     /**
      * Get guest data from local storage
      * @returns {Array|*}
@@ -15,6 +29,15 @@ angular.module('shuffling').service('GuestDataSvc', function(){
             });
 
         }
+
+        // If no data in local storage use sample data
+        if(guests.length==0){
+            sampleGuestData.forEach(function(sampleGuest){
+                sampleGuest.transitionDate = new Date(sampleGuest.transitionDate);
+                guests.push(sampleGuest);
+            });
+        }
+
         return guests;
     };
 
