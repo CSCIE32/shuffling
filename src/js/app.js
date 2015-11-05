@@ -7,6 +7,7 @@ app.controller('FormController', ['$scope', 'shufflingSvc', function ($scope, sh
      * On form submit
      */
     vm.submit = function () {
+        console.log('FormController.submit()');
         shufflingSvc.addGuest(vm.name, vm.transitionDate, vm.status, vm.pickupLocation);
 
         // Switch to guests tab
@@ -25,6 +26,7 @@ app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shu
      * Get guest list
      */
     vm.getGuestList = function () {
+        console.log('TabController.getGuestList()');
         return shufflingSvc.getGuestList();
     };
 
@@ -33,6 +35,7 @@ app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shu
      * @param index
      */
     vm.deleteGuest = function(index){
+        console.log('TabController.deleteGuest()');
         shufflingSvc.deleteGuest(index);
     };
 
@@ -86,6 +89,7 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
      * @param pickupLocation
      */
     this.addGuest = function (name, transitionDate, status, pickupLocation) {
+        console.log('shufflingSvc.addGuest()');
         guests.push(new Guest(name, transitionDate, status, pickupLocation));
         GuestDataSvc.saveGuestData(guests);
     };
@@ -95,6 +99,7 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
      * @param index
      */
     this.deleteGuest = function (index) {
+        console.log('shufflingSvc.deleteGuest()');
         var proceed = confirm("Do you want to delete guest: "+ guests[index].name+ "?");
         if(proceed) {
             guests.splice(index, 1);
@@ -114,21 +119,5 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
         }
         GuestDataSvc.saveGuestData(guests);
     };
-
-}]);
-
-
-app.service('sampleDataSvc', ['$http', function ($http) {
-    this.guests = [];
-    var that = this;
-    $http.get('guests.json')
-        .success(function (data) {
-            console.log('json data -',data);
-            //that.guests = JSON.parse(data);
-            that.guests = data;
-        })
-        .error(function (data) {
-            alert('Error reading guests.json');
-        });
 
 }]);
