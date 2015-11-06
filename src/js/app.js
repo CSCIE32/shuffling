@@ -65,7 +65,7 @@ app.controller('TabController', ['$scope', 'shufflingSvc', function ($scope, shu
             options.push('arrived');
         }
         if('arrived' === status ){
-            options.push('picked');
+            options.push('pickup');
         }
         return options;
     };
@@ -78,13 +78,13 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
     /**
      * All guest data
      */
-    var guests = GuestDataSvc.getGuestData();
+    this.guests = GuestDataSvc.getGuestData();
 
     /**
      * Return all guest data
      */
     this.getGuestList = function () {
-        return guests ;
+        return that.guests ;
     };
 
     /**
@@ -96,8 +96,8 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
      */
     this.addGuest = function (name, transitionDate, status, pickupLocation) {
         console.log('shufflingSvc.addGuest()');
-        guests.push(new Guest(name, transitionDate, status, pickupLocation));
-        GuestDataSvc.saveGuestData(guests);
+        that.guests.push(new Guest(name, transitionDate, status, pickupLocation));
+        GuestDataSvc.saveGuestData(that.guests);
     };
 
     /**
@@ -106,10 +106,10 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
      */
     this.deleteGuest = function (index) {
         console.log('shufflingSvc.deleteGuest()');
-        var proceed = confirm("Do you want to delete guest: "+ guests[index].name+ "?");
+        var proceed = confirm("Do you want to delete guest: "+ that.guests[index].name+ "?");
         if(proceed) {
-            guests.splice(index, 1);
-            GuestDataSvc.saveGuestData(guests);
+            that.guests.splice(index, 1);
+            GuestDataSvc.saveGuestData(that.guests);
         }
     };
 
@@ -118,12 +118,12 @@ app.service('shufflingSvc', ['Guest', 'GuestDataSvc', function (Guest,GuestDataS
      * @param index
      */
     this.editGuest = function (index) {
-        if(undefined == guests[index].checked){
-            guests[index].checked =  true;
+        if(undefined === that.guests[index].checked){
+            that.guests[index].checked =  true;
         } else{
-            guests[index].checked = !guests[index].checked;
+            that.guests[index].checked = !that.guests[index].checked;
         }
-        GuestDataSvc.saveGuestData(guests);
+        GuestDataSvc.saveGuestData(that.guests);
     };
 
 }]);

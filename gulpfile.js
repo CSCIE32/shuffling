@@ -39,7 +39,7 @@ gulp.task('css', function(){
         .pipe(connect.reload());
 });
 
-
+// Move bootstrap fonts
 gulp.task('fonts', function(){
     return gulp.src([
         'bower_components/bootstrap/dist/fonts/*.*'])

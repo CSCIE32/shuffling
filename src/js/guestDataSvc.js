@@ -1,5 +1,7 @@
 angular.module('shuffling').service('GuestDataSvc', function(){
 
+    var that = this;
+    that.guests = [];
     var sampleGuestData = [
         {
             "name": "Bilbo Baggins",
@@ -19,26 +21,26 @@ angular.module('shuffling').service('GuestDataSvc', function(){
      * @returns {Array|*}
      */
     this.getGuestData = function(){
-        var guests = [];
+        console.log(localStorage.getItem('guests'));
         var jsonGuests = JSON.parse(localStorage.getItem('guests'));
 
-        if(jsonGuests!= null){
+        if(jsonGuests!== null){
             jsonGuests.forEach(function(guest){
                 guest.transitionDate = new Date(guest.transitionDate);
-                guests.push(guest);
+                that.guests.push(guest);
             });
 
         }
 
         // If no data in local storage use sample data
-        if(guests.length==0){
+        if(that.guests.length === 0){
             sampleGuestData.forEach(function(sampleGuest){
                 sampleGuest.transitionDate = new Date(sampleGuest.transitionDate);
-                guests.push(sampleGuest);
+                that.guests.push(sampleGuest);
             });
         }
 
-        return guests;
+        return that.guests;
     };
 
 
